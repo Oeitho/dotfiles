@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Constants
+IGNORED_PATHS=("." ".." "setup")
+
+# Helper function that checks whether a file is among ignored files
+is_ignored_file() {
+    FILENAME="$1"
+    if [[ " ${IGNORED_PATHS[@]} " =~ " ${FILENAME} " ]]; then
+        return 1
+    fi
+    return 0
+}
+
+directory=$(dirname "$0")
+
+for file in $(ls -a "$directory")
+do
+    echo "${directory}/${file}" 
+    is_ignored_file "$file"
+    file_ignored="$?"
+    if [[ "$file_ignored" = 0 ]]
+    then
+        cp "${directory}/${file}" ~
+    fi
+done
